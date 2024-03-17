@@ -1,0 +1,41 @@
+header {
+    padding: 12px 0;
+    background-color: rgb(55, 90, 165);
+}
+
+form {
+    margin: 0 auto;
+
+}
+
+.inputContainer {
+    width: 400px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.searchInput {
+    padding: 8px;
+    width: 400px;
+    padding-left: 32px;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+}
+
+.searchSVG {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 3px;
+    left: 5px;
+}
+
+.submitBtn {
+    width: 31px;
+    height: 31px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
