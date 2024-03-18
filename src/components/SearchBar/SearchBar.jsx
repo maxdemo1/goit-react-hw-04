@@ -3,7 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import styles from "./SearchBar.module.css";
 
-const SearchBar = ({ seacrhFormSubmit }) => {
+const SearchBar = ({ searchByKeyword, resetPage }) => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     const searchQuery = evt.target.elements.searchQuery.value.trim();
@@ -16,7 +16,8 @@ const SearchBar = ({ seacrhFormSubmit }) => {
 
       return;
     }
-    seacrhFormSubmit(searchQuery);
+    resetPage(1);
+    searchByKeyword(searchQuery);
   };
 
   return (

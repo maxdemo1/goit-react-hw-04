@@ -3,9 +3,7 @@ import styles from "./ImageModal.module.css";
 
 ReactModal.setAppElement("#root");
 
-const ImageModal = ({ dataModal, modalClose }) => {
-  const [openState, imageData] = dataModal;
-
+const ImageModal = ({ dataModal, openState, modalClose }) => {
   return (
     <div>
       <ReactModal
@@ -18,8 +16,8 @@ const ImageModal = ({ dataModal, modalClose }) => {
         overlayClassName={styles.modalOverlay}
       >
         <img
-          src={imageData.urls.full}
-          alt={imageData.description}
+          src={dataModal.urls.full}
+          alt={dataModal.description}
           className={styles.modalImage}
         />
       </ReactModal>
