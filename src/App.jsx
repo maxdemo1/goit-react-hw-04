@@ -84,14 +84,11 @@ const App = () => {
     }
     if (userQuery !== "" && page > 1) {
       loadMoreImages();
-    } else return;
-  }, [page, userQuery]);
-
-  useEffect(() => {
+    }
     if (page === totalPages) {
       setLoadMoreShow(false);
-    }
-  }, [page]);
+    } else return;
+  }, [page, userQuery]);
 
   return (
     <>
