@@ -14,16 +14,3 @@ export async function requestForImage(searchQuery, page = 1) {
   });
   return responseData;
 }
-
-export async function requestMoreImage(searchQuery, page) {
-  const { data: responseData } = await axios.get("", {
-    params: {
-      client_id: ACCESS_KEY,
-      query: searchQuery,
-      page: page,
-      per_page: 12,
-      orientation: "landscape",
-    },
-  });
-  return responseData;
-}

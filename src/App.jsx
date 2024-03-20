@@ -1,6 +1,6 @@
 import SearchBar from "./components/SearchBar/SearchBar";
 import "./App.css";
-import { requestMoreImage, requestForImage } from "./services/api";
+import { requestForImage } from "./services/api";
 import { useEffect, useState } from "react";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
@@ -35,55 +35,60 @@ const App = () => {
     setPage((prevState) => (prevState += 1));
   };
 
-  async function seacrhFormSubmit(userSearchQuery) {
-    try {
-      setPage(1);
-      setTotalPages(0);
-      setUserQuery(userSearchQuery);
-      setLoading(true);
-      setShowList([]);
-      setShowError(false);
-      setNoResults(false);
-      const responseData = await requestForImage(userSearchQuery);
-      if (responseData.total === 0) {
-        setNoResults(true);
-      }
-      if (responseData.total_pages > 1) {
-        setTotalPages(responseData.total_pages);
-        setLoadMoreShow(true);
-      }
-      setShowList(responseData.results);
-    } catch (error) {
-      setShowError(true);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function loadMoreImages() {
-    try {
-      setLoading(true);
-      setShowError(false);
-      const newImageData = await requestMoreImage(userQuery, page);
-      setShowList((prevState) => {
-        return [...prevState, ...newImageData.results];
-      });
-      setTimeout(() => {
-        window.scrollTo(0, document.body.scrollHeight);
-      }, 400);
-    } catch (error) {
-      setShowError(true);
-    } finally {
-      setLoading(false);
-    }
+  function searchFormSubmit(userSearchQuery) {
+    setPage(1);
+    setTotalPages(0);
+    setUserQuery(userSearchQuery);
+    setNoResults(false);
+    setShowError(false);
   }
 
   useEffect(() => {
     if (userQuery !== "" && page === 1) {
-      seacrhFormSubmit(userQuery);
+      (() => {
+        async function searchByUserQuery() {
+          try {
+            setLoading(true);
+            setShowList([]);
+            const responseData = await requestForImage(userQuery);
+            if (responseData.total === 0) {
+              setNoResults(true);
+            }
+            if (responseData.total_pages > 1) {
+              setTotalPages(responseData.total_pages);
+              setLoadMoreShow(true);
+            }
+            setShowList(responseData.results);
+          } catch (error) {
+            setShowError(true);
+          } finally {
+            setLoading(false);
+          }
+        }
+        searchByUserQuery();
+      })();
     }
     if (userQuery !== "" && page > 1) {
-      loadMoreImages();
+      (() => {
+        async function loadMoreImages() {
+          try {
+            setLoading(true);
+            setShowError(false);
+            const newImageData = await requestForImage(userQuery, page);
+            setShowList((prevState) => {
+              return [...prevState, ...newImageData.results];
+            });
+            setTimeout(() => {
+              window.scrollTo(0, document.body.scrollHeight);
+            }, 400);
+          } catch (error) {
+            setShowError(true);
+          } finally {
+            setLoading(false);
+          }
+        }
+        loadMoreImages();
+      })();
     }
     if (page === totalPages) {
       setLoadMoreShow(false);
@@ -92,7 +97,7 @@ const App = () => {
 
   return (
     <>
-      <SearchBar searchByKeyword={setUserQuery} resetPage={setPage} />
+      <SearchBar searchByKeyword={searchFormSubmit} resetPage={setPage} />
       {showError && <ErrorMessage />}
       {showList.length > 0 && (
         <ImageGallery
