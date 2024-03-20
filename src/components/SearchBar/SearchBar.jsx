@@ -16,8 +16,10 @@ const SearchBar = ({ searchByKeyword, resetPage }) => {
 
       return;
     }
+
     resetPage(1);
     searchByKeyword(searchQuery);
+    evt.target.elements.searchQuery.value = "";
   };
 
   return (
