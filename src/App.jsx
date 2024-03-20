@@ -20,7 +20,6 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [loadMoreShow, setLoadMoreShow] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
-
   const openModalFromImage = (imageData) => {
     setDataModal(imageData);
     setOpenModalState(true);
@@ -55,7 +54,8 @@ const App = () => {
             if (responseData.total === 0) {
               setNoResults(true);
             }
-            if (responseData.total_pages > 1) {
+
+            if (responseData.total_pages > 1 && totalPages === 0) {
               setTotalPages(responseData.total_pages);
               setLoadMoreShow(true);
             }
@@ -71,11 +71,10 @@ const App = () => {
         searchByUserQuery();
       })();
     }
-
-    if (page === totalPages) {
+    if (totalPages === page) {
       setLoadMoreShow(false);
     } else return;
-  }, [page, userQuery]);
+  }, [page, userQuery, totalPages]);
 
   return (
     <>
