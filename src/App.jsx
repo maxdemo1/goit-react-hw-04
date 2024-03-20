@@ -41,16 +41,17 @@ const App = () => {
     setUserQuery(userSearchQuery);
     setNoResults(false);
     setShowError(false);
+    setShowList([]);
   }
 
   useEffect(() => {
-    if (userQuery !== "" && page === 1) {
+    if (userQuery !== "") {
       (() => {
         async function searchByUserQuery() {
           try {
             setLoading(true);
-            setShowList([]);
-            const responseData = await requestForImage(userQuery);
+            setShowError(false);
+            const responseData = await requestForImage(userQuery, page);
             if (responseData.total === 0) {
               setNoResults(true);
             }
@@ -58,7 +59,9 @@ const App = () => {
               setTotalPages(responseData.total_pages);
               setLoadMoreShow(true);
             }
-            setShowList(responseData.results);
+            setShowList((prevState) => {
+              return [...prevState, ...responseData.results];
+            });
           } catch (error) {
             setShowError(true);
           } finally {
@@ -68,28 +71,7 @@ const App = () => {
         searchByUserQuery();
       })();
     }
-    if (userQuery !== "" && page > 1) {
-      (() => {
-        async function loadMoreImages() {
-          try {
-            setLoading(true);
-            setShowError(false);
-            const newImageData = await requestForImage(userQuery, page);
-            setShowList((prevState) => {
-              return [...prevState, ...newImageData.results];
-            });
-            setTimeout(() => {
-              window.scrollTo(0, document.body.scrollHeight);
-            }, 400);
-          } catch (error) {
-            setShowError(true);
-          } finally {
-            setLoading(false);
-          }
-        }
-        loadMoreImages();
-      })();
-    }
+
     if (page === totalPages) {
       setLoadMoreShow(false);
     } else return;
