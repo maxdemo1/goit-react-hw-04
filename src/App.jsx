@@ -74,7 +74,7 @@ const App = () => {
     if (totalPages === page) {
       setLoadMoreShow(false);
     } else return;
-  }, [page, userQuery, totalPages]);
+  }, [page, userQuery]);
 
   return (
     <>
